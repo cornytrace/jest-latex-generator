@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const dateFormat = require('dateformat');
 const stripAnsi = require('strip-ansi');
@@ -15,16 +14,15 @@ class ReportGenerator {
 	 * @param  {Object} data   Jest test information data
 	 * @return {Promise}
 	 */
-	generate({ data, ignoreConsole }) {
+	generate({
+		data,
+		ignoreConsole,
+	}) {
 		const fileDestination = this.config.getOutputFilepath();
-		return this.getStylesheetContent()
-			.then(stylesheet => this.renderHtmlReport({
-				data,
-				stylesheet,
-			}))
-			.then(xmlBuilderOutput => utils.writeFile({
+		return this.renderStructure(data)
+			.then(output => utils.writeFile({
 				filePath: fileDestination,
-				content: xmlBuilderOutput,
+				content: output,
 			}))
 			.then(() => utils.logMessage({
 				type: 'success',
@@ -61,42 +59,19 @@ class ReportGenerator {
 	 * @param  {Object} data		The test result data
 	 * @return {xmlbuilder}
 	 */
-	renderHtmlReport({ data, stylesheet }) {
+	renderStructure(data) {
 		return new Promise((resolve, reject) => {
 			// Make sure that test data was provided
-			if (!data) { return reject(new Error('Test data missing or malformed')); }
-
-			// Fetch Page Title from config
-			const pageTitle = this.config.getPageTitle();
-
-			// Create an xmlbuilder object with HTML and Body tags
-			const htmlOutput = utils.createHtmlBase({
-				pageTitle,
-				stylesheet,
-			});
-
-			// HEADER
-			const header = htmlOutput.ele('header');
-			// Page Title
-			header.ele('h1', { id: 'title' }, pageTitle);
-			// Logo
-			const logo = this.config.getLogo();
-			if (logo) {
-				header.ele('img', { id: 'logo', src: logo });
+			if (!data) {
+				return reject(new Error('Test data missing or malformed'));
 			}
 
-			// METADATA
-			const metaDataContainer = htmlOutput.ele('div', { id: 'metadata-container' });
+			// prelude
+			let output = `\\documentclass[preview]{standalone}
+\\begin{document}\n`;
+
 			// Timestamp
 			const timestamp = new Date(data.startTime);
-			metaDataContainer.ele('div', { id: 'timestamp' }, `Start: ${dateFormat(timestamp, this.config.getDateFormat())}`);
-			// Test Summary
-			metaDataContainer.ele('div', { id: 'summary' }, `
-				${data.numTotalTests} tests --
-				${data.numPassedTests} passed /
-				${data.numFailedTests} failed /
-				${data.numPendingTests} pending
-			`);
 
 			// Apply the configured sorting of test data
 			const sortedTestData = sorting.sortSuiteResults({
@@ -106,62 +81,24 @@ class ReportGenerator {
 
 			// Test Suites
 			sortedTestData.forEach((suite) => {
-				if (!suite.testResults || suite.testResults.length <= 0) { return; }
-
-				// Suite Information
-				const suiteInfo = htmlOutput.ele('div', { class: 'suite-info' });
-				// Suite Path
-				suiteInfo.ele('div', { class: 'suite-path' }, suite.testFilePath);
-				// Suite execution time
-				const executionTime = (suite.perfStats.end - suite.perfStats.start) / 1000;
-				suiteInfo.ele('div', { class: `suite-time${executionTime > 5 ? ' warn' : ''}` }, `${executionTime}s`);
-
-				// Suite Test Table
-				const suiteTable = htmlOutput.ele('table', { class: 'suite-table', cellspacing: '0', cellpadding: '0' });
+				if (!suite.testResults || suite.testResults.length <= 0) {
+					return;
+				}
+				const testPathSplit = suite.testFilePath.split('/');
+				const suiteName = testPathSplit[testPathSplit.length - 1];
+				output += `\\subsection{${suiteName}}\n\\begin{itemize}\n`;
 
 				// Test Results
 				suite.testResults.forEach((test) => {
-					const testTr = suiteTable.ele('tr', { class: test.status });
-
-					// Suite Name(s)
-					testTr.ele('td', { class: 'suite' }, test.ancestorTitles.join(' > '));
-
-					// Test name
-					const testTitleTd = testTr.ele('td', { class: 'test' }, test.title);
-
-					// Test Failure Messages
-					if (test.failureMessages && (this.config.shouldIncludeFailureMessages())) {
-						const failureMsgDiv = testTitleTd.ele('div', { class: 'failureMessages' });
-						test.failureMessages.forEach((failureMsg) => {
-							failureMsgDiv.ele('pre', { class: 'failureMsg' }, stripAnsi(failureMsg));
-						});
-					}
-
-					// Append data to <tr>
-					testTr.ele('td', { class: 'result' }, (test.status === 'passed') ? `${test.status} in ${test.duration / 1000}s` : test.status);
+					output += `\\item ${test.title}\n`;
 				});
 
-				// Test Suite console.logs
-				if (suite.console && suite.console.length > 0 && (this.config.shouldIncludeConsoleLog())) {
-					// Console Log Container
-					const consoleLogContainer = htmlOutput.ele('div', { class: 'suite-consolelog' });
-					// Console Log Header
-					consoleLogContainer.ele('div', { class: 'suite-consolelog-header' }, 'Console Log');
-
-					// Logs
-					suite.console.forEach((log) => {
-						const logElement = consoleLogContainer.ele('div', { class: 'suite-consolelog-item' });
-						logElement.ele('pre', { class: 'suite-consolelog-item-origin' }, stripAnsi(log.origin));
-						logElement.ele('pre', { class: 'suite-consolelog-item-message' }, stripAnsi(log.message));
-					});
-				}
+				output += '\\end{itemize}\n';
 			});
-			// Custom Javascript
-			const customScript = this.config.getCustomScriptFilepath();
-			if (customScript) {
-				htmlOutput.raw(`<script src="${customScript}"></script>`);
-			}
-			return resolve(htmlOutput);
+
+			output += '\\end{document}\n';
+			// console.log(JSON.stringify(data, null, 4));
+			return resolve(output);
 		});
 	}
 }

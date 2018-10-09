@@ -14,7 +14,9 @@ function JestHtmlReporter(globalConfig, options) {
 	 */
 	if (Object.prototype.hasOwnProperty.call(globalConfig, 'testResults')) {
 		// Generate Report
-		reportGenerator.generate({ data: globalConfig });
+		reportGenerator.generate({
+			data: globalConfig,
+		});
 		// Return the results as required by Jest
 		return globalConfig;
 	}
@@ -33,7 +35,9 @@ function JestHtmlReporter(globalConfig, options) {
 		// Apply the updated config
 		reportGenerator.config = config;
 		// Generate Report
-		return reportGenerator.generate({ data: testResult });
+		return reportGenerator.generate({
+			data: testResult,
+		});
 	};
 }
 

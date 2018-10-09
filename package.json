@@ -1,7 +1,7 @@
 {
-  "name": "jest-html-reporter",
-  "version": "2.4.2",
-  "description": "Jest test results processor for generating a summary in HTML",
+  "name": "jest-latex-generator",
+  "version": "0.1.0",
+  "description": "Jest processor for exporting the test structure to latex",
   "main": "dist/main",
   "unpkg": "dist/main.min.js",
   "files": [
@@ -19,21 +19,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hargne/jest-html-reporter.git"
+    "url": "git+https://github.com/cornytrace/jest-latex-generator.git"
   },
   "keywords": [
     "jest",
-    "html",
+    "latex",
     "reporter",
-    "report",
+    "generator",
     "plugin"
   ],
-  "author": "Johan Hargne",
+  "author": "Cornee Traas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Hargne/jest-html-reporter/issues"
+    "url": "https://github.com/cornytrace/jest-latex-generator.git"
   },
-  "homepage": "https://github.com/Hargne/jest-html-reporter#readme",
+  "homepage": "https://github.com/cornytrace/jest-latex-generator.git",
   "engines": {
     "node": ">=4.8.3"
   },
