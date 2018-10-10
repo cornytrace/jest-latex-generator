@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
-const xmlbuilder = require('xmlbuilder');
 
 /**
  * Logs a message of a given type in the terminal
@@ -9,18 +8,25 @@ const xmlbuilder = require('xmlbuilder');
  * @param {String} msg
  * @return {Object}
  */
-const logMessage = ({ type, msg, ignoreConsole }) => {
+const logMessage = ({
+	type,
+	msg,
+	ignoreConsole,
+}) => {
 	const logTypes = {
 		default: '\x1b[37m%s\x1b[0m',
 		success: '\x1b[32m%s\x1b[0m',
 		error: '\x1b[31m%s\x1b[0m',
 	};
 	const logColor = (!logTypes[type]) ? logTypes.default : logTypes[type];
-	const logMsg = `jest-html-reporter >> ${msg}`;
+	const logMsg = `jest-latex-generator >> ${msg}`;
 	if (!ignoreConsole) {
 		console.log(logColor, logMsg); // eslint-disable-line
 	}
-	return { logColor, logMsg }; // Return for testing purposes
+	return {
+		logColor,
+		logMsg,
+	}; // Return for testing purposes
 };
 
 /**
@@ -28,7 +34,10 @@ const logMessage = ({ type, msg, ignoreConsole }) => {
  * @param  {String} filePath
  * @param  {Any} 	content
  */
-const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
+const writeFile = ({
+	filePath,
+	content,
+}) => new Promise((resolve, reject) => {
 	mkdirp(path.dirname(filePath), (mkdirpError) => {
 		if (mkdirpError) {
 			return reject(new Error(`Something went wrong when creating the folder: ${mkdirpError}`));
@@ -42,21 +51,11 @@ const writeFile = ({ filePath, content }) => new Promise((resolve, reject) => {
 	});
 });
 
-/**
- * Sets up a basic HTML page to apply the content to
- * @return {xmlbuilder}
- */
-const createHtmlBase = ({ pageTitle, stylesheet }) => xmlbuilder.create({
-	html: {
-		head: {
-			meta: { '@charset': 'utf-8' },
-			title: { '#text': pageTitle },
-			style: { '@type': 'text/css', '#text': stylesheet },
-		},
-	},
-});
-
-const sortAlphabetically = ({ a, b, reversed }) => {
+const sortAlphabetically = ({
+	a,
+	b,
+	reversed,
+}) => {
 	if ((!reversed && a < b) || (reversed && a > b)) {
 		return -1;
 	} else if ((!reversed && a > b) || (reversed && a < b)) {
@@ -68,6 +67,5 @@ const sortAlphabetically = ({ a, b, reversed }) => {
 module.exports = {
 	logMessage,
 	writeFile,
-	createHtmlBase,
 	sortAlphabetically,
 };

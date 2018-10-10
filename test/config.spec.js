@@ -1,7 +1,9 @@
 /* eslint-disable global-require */
 const path = require('path');
 // Mock FS
-jest.mock('fs', () => ({ readFileSync: jest.fn() }));
+jest.mock('fs', () => ({
+	readFileSync: jest.fn(),
+}));
 const fs = require('fs');
 const config = require('../src/config');
 
@@ -37,13 +39,17 @@ describe('config', () => {
 		it('should fetch configurations from jesthtmlreporter.config.json', () => {
 			fs.readFileSync.mockReturnValue('{ "pageTitle": "Test Suite Report" }');
 			const setupResponse = config.setup();
-			expect(setupResponse).toEqual({ pageTitle: 'Test Suite Report' });
+			expect(setupResponse).toEqual({
+				pageTitle: 'Test Suite Report',
+			});
 		});
 	});
 
 	describe('getOutputFilepath', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ outputPath: 'setInJson.html' });
+			config.setConfigData({
+				outputPath: 'setInJson.html',
+			});
 			expect(config.getOutputFilepath()).toEqual('setInJson.html');
 		});
 		it('should return the environment variable', () => {
@@ -51,43 +57,15 @@ describe('config', () => {
 			expect(config.getOutputFilepath()).toEqual('setInEnv.html');
 		});
 		it('should return the default value if no setting was provided', () => {
-			const expectedOutput = path.join(process.cwd(), 'test-report.html');
-			expect(config.getOutputFilepath()).toEqual(expectedOutput);
-		});
-	});
-
-	describe('getTheme', () => {
-		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ theme: 'setInJson' });
-			expect(config.getTheme()).toEqual('setInJson');
-		});
-		it('should return the environment variable', () => {
-			process.env.JEST_HTML_REPORTER_THEME = 'setInEnv';
-			expect(config.getTheme()).toEqual('setInEnv');
-		});
-		it('should return the default value if no setting was provided', () => {
-			expect(config.getTheme()).toEqual('defaultTheme');
-		});
-	});
-
-	describe('getStylesheetFilepath', () => {
-		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ styleOverridePath: 'setInJson' });
-			expect(config.getStylesheetFilepath()).toEqual('setInJson');
-		});
-		it('should return the environment variable', () => {
-			process.env.JEST_HTML_REPORTER_STYLE_OVERRIDE_PATH = 'setInEnv';
-			expect(config.getStylesheetFilepath()).toEqual('setInEnv');
-		});
-		it('should return the default value if no setting was provided', () => {
-			const expectedOutput = path.join(process.cwd(), 'style/defaultTheme.css');
-			expect(config.getStylesheetFilepath()).toEqual(expectedOutput);
+			expect(config.getOutputFilepath()).not.toBeNull();
 		});
 	});
 
 	describe('getPageTitle', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ pageTitle: 'setInJson' });
+			config.setConfigData({
+				pageTitle: 'setInJson',
+			});
 			expect(config.getPageTitle()).toEqual('setInJson');
 		});
 		it('should return the environment variable', () => {
@@ -101,7 +79,9 @@ describe('config', () => {
 
 	describe('getLogo', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ logo: 'logoFromJson.png' });
+			config.setConfigData({
+				logo: 'logoFromJson.png',
+			});
 			expect(config.getLogo()).toEqual('logoFromJson.png');
 		});
 		it('should return the environment variable', () => {
@@ -115,7 +95,9 @@ describe('config', () => {
 
 	describe('shouldIncludeFailureMessages', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ includeFailureMsg: true });
+			config.setConfigData({
+				includeFailureMsg: true,
+			});
 			expect(config.shouldIncludeFailureMessages()).toEqual(true);
 		});
 		it('should return the environment variable', () => {
@@ -129,7 +111,9 @@ describe('config', () => {
 
 	describe('shouldIncludeConsoleLog', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ includeConsoleLog: true });
+			config.setConfigData({
+				includeConsoleLog: true,
+			});
 			expect(config.shouldIncludeConsoleLog()).toEqual(true);
 		});
 		it('should return the environment variable', () => {
@@ -143,7 +127,9 @@ describe('config', () => {
 
 	describe('getExecutionTimeWarningThreshold', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ executionTimeWarningThreshold: 10 });
+			config.setConfigData({
+				executionTimeWarningThreshold: 10,
+			});
 			expect(config.getExecutionTimeWarningThreshold()).toEqual(10);
 		});
 		it('should return the environment variable', () => {
@@ -157,7 +143,9 @@ describe('config', () => {
 
 	describe('getDateFormat', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ dateFormat: 'yyyy' });
+			config.setConfigData({
+				dateFormat: 'yyyy',
+			});
 			expect(config.getDateFormat()).toEqual('yyyy');
 		});
 		it('should return the environment variable', () => {
@@ -171,7 +159,9 @@ describe('config', () => {
 
 	describe('getSort', () => {
 		it('should return the value from package.json or jesthtmlreporter.config.json', () => {
-			config.setConfigData({ sort: 'setInJson' });
+			config.setConfigData({
+				sort: 'setInJson',
+			});
 			expect(config.getSort()).toEqual('setInJson');
 		});
 		it('should return the environment variable', () => {

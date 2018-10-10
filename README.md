@@ -1,30 +1,6 @@
-<p align="center">
-	<h3 align="center">jest-html-reporter</h3>
-	<p align="center">
-		A <a href="https://github.com/facebook/jest">Jest</a> test results processor for generating a summary in HTML.
-		<br>
-		<a href="https://github.com/Hargne/jest-html-reporter/wiki"><strong>Documentation »</strong></a>
-		<br />
-		<br />
-		<img src="https://nodei.co/npm/jest-html-reporter.png?downloads=true&stars=true" alt="">
-		<br />
-		<br />
-		<img src="https://travis-ci.org/Hargne/jest-html-reporter.svg?branch=master">
-		<br />
-		<br />
-		Inspired by <a href="https://github.com/matthias-schuetz/karma-htmlfile-reporter">karma-htmlfile-reporter</a>
-		<br />
-		<br />
-		<hr />
-		<img src="https://user-images.githubusercontent.com/3501024/36374670-711b7cea-156c-11e8-8b7b-7fc5f38b1866.png" alt="">
-	</p>
-</p>
-
-***
-
 ## Installation
 ```shell
-npm install jest-html-reporter --save-dev
+npm install jest-latex-generator --save-dev
 ```
 
 ## Usage
@@ -32,25 +8,23 @@ Configure Jest to process the test results by adding the following entry to the 
 ```JSON
 "reporters": [
 	"default",
-	["./node_modules/jest-html-reporter", {
+	["./node_modules/jest-latex-generator", {
 		"pageTitle": "Test Report"
 	}]
 ]
 ```
-As you run Jest from within the terminal, a file called *test-report.html* will be created within your root folder containing information about your tests.
-
-There are multiple configuration options available. To read more about these, please refer to the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
+As you run Jest from within the terminal, a file called *test-report.tex* will be created within your root folder containing information about your tests.
 
 ### Alternative Usage as a Test Results Processor
 To run the reporter as a test results processor (after Jest is complete instead of running in parallel), add the following entry to the Jest config (jest.config.json):
 ```JSON
 {
-	"testResultsProcessor": "./node_modules/jest-html-reporter"
+	"testResultsProcessor": "./node_modules/jest-latex-generator"
 }
 ``` 
 
 **Note:** When running as a testResultsProcessor, the configuration needs be placed  within a new file named `jesthtmlreporter.config.json` residing in the root folder.
-More information about this can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration).
+More information about this can be found in the [documentation](https://github.com/cornytrace/jest-latex-generator/wiki/configuration).
 
 
 ## Node Compatibility
@@ -69,13 +43,13 @@ Please note that all configuration properties are optional.
 | `includeConsoleLog` | `BOOLEAN` | If set to true, this will output all triggered console logs for each test suite. | `false`
 | `styleOverridePath` | `STRING` | The path to a file containing CSS styles that should override the default styling.* | `null`
 | `customScriptPath` | `STRING` | Path to a javascript file that should be injected into the test report | `null`
-| `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes) | `"defaultTheme"`
+| `theme` | `STRING` | The name of the reporter themes to use when rendering the report. You can find the available themes in the [documentation](https://github.com/cornytrace/jest-latex-generator/wiki/Test-Report-Themes) | `"defaultTheme"`
 | `logo` | `STRING` | Path to a logo that will be included in the header of the report | `null`
 | `executionTimeWarningThreshold` | `NUMBER` | The threshold for test execution time (in seconds) in each test suite that will render a warning on the report page. 5 seconds is the default timeout in Jest. | `5`
-| `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
-| `sort` | `STRING` | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Sorting-Methods). | `"default"`
+| `dateFormat` | `STRING` | The format in which date/time should be formatted in the test report. Have a look in the [documentation](https://github.com/cornytrace/jest-latex-generator/wiki/Date-Format) for the available date format variables. | `"yyyy-mm-dd HH:MM:ss"`
+| `sort` | `STRING` | Sorts the test results using the given method. Available sorting methods can be found in the [documentation](https://github.com/cornytrace/jest-latex-generator/wiki/Sorting-Methods). | `"default"`
 
-> *The plugin will search for the *styleOverridePath* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/Test-Report-Themes).
+> *The plugin will search for the *styleOverridePath* from the root directory, therefore there is no need to prepend the string with `./` or `../` - You can read more about the themes in the [documentation](https://github.com/cornytrace/jest-latex-generator/wiki/Test-Report-Themes).
 
 ---
 
@@ -93,5 +67,5 @@ export JEST_HTML_REPORTER_PAGE_TITLE="$BRANCH_NAME"\ Test\ Report
 ```
 
 ### Configuration Environment Variables
-The environment variables reflect the configuration options available in JSON format. Please read the [documentation](https://github.com/Hargne/jest-html-reporter/wiki/configuration#configuration-environment-variables) for more information on these variables.
+The environment variables reflect the configuration options available in JSON format. Please read the [documentation](https://github.com/cornytrace/jest-latex-generator/wiki/configuration#configuration-environment-variables) for more information on these variables.
 

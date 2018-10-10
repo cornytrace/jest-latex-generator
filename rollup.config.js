@@ -3,7 +3,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const uglify = require('rollup-plugin-uglify');
 
-const externalLibraries = ['fs', 'path', 'xmlbuilder', 'strip-ansi', 'mkdirp', 'dateformat'];
+const externalLibraries = ['fs', 'path', 'strip-ansi', 'mkdirp', 'dateformat'];
 
 const regularBundleConfig = {
 	input: 'src/index.js',

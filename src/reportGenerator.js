@@ -1,6 +1,4 @@
 const fs = require('fs');
-const dateFormat = require('dateformat');
-const stripAnsi = require('strip-ansi');
 const utils = require('./utils');
 const sorting = require('./sorting');
 
@@ -57,21 +55,18 @@ class ReportGenerator {
 	 * Returns a HTML containing the test report.
 	 * @param  {String} stylesheet
 	 * @param  {Object} data		The test result data
-	 * @return {xmlbuilder}
+	 * @return {String} output
 	 */
 	renderStructure(data) {
 		return new Promise((resolve, reject) => {
 			// Make sure that test data was provided
-			if (!data) {
+			if (!data || !Array.isArray(data.testResults)) {
 				return reject(new Error('Test data missing or malformed'));
 			}
 
 			// prelude
 			let output = `\\documentclass[preview]{standalone}
 \\begin{document}\n`;
-
-			// Timestamp
-			const timestamp = new Date(data.startTime);
 
 			// Apply the configured sorting of test data
 			const sortedTestData = sorting.sortSuiteResults({

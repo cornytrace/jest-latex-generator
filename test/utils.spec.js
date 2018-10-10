@@ -11,7 +11,7 @@ describe('utils', () => {
 			});
 			// Then
 			expect(log.logColor).toEqual('\x1b[32m%s\x1b[0m');
-			expect(log.logMsg).toEqual('jest-html-reporter >> This should work');
+			expect(log.logMsg).toEqual('jest-latex-generator >> This should work');
 		});
 		it('should set the log type to default if none or an invalid type was provided', () => {
 			// Given
