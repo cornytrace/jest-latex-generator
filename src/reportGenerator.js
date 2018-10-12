@@ -79,8 +79,7 @@ class ReportGenerator {
 				if (!suite.testResults || suite.testResults.length <= 0) {
 					return;
 				}
-				const testPathSplit = suite.testFilePath.split('/');
-				const suiteName = testPathSplit[testPathSplit.length - 1];
+				const suiteName = suite.testFilePath.replace(/^.*[\\\/]/, '');
 				output += `\\subsection{${suiteName}}\n\\begin{itemize}\n`;
 
 				// Test Results
